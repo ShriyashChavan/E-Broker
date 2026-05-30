@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments - E BROKERR{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-calendar-check fa-2x me-3"></i>
+                    <div>
+                        <h3 class="mb-0">Appointment Requests</h3>
+                        <p class="mb-0 opacity-75">Manage your property viewing requests</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if appointments %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><i class="fas fa-home"></i> Property</th>
+                                <th><i class="fas fa-user"></i> Tenant</th>
+                                <th><i class="fas fa-phone"></i> Contact</th>
+                                <th><i class="fas fa-clock"></i> Date & Time</th>
+                                <th><i class="fas fa-info-circle"></i> Status</th>
+                                <th><i class="fas fa-cogs"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment, property, tenant in appointments %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            {% if property.images %}
+                                            <img src="{{ property.images[0].image_url }}" alt="Property Image" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                                            {% else %}
+                                            <img src="{{ url_for('static', filename='images/default_property.svg') }}" alt="Default Property Image" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <strong>{{ property.ptype }} - {{ property.bhk }} BHK</strong><br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt"></i> {{ property.plocation }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{ tenant.tname }}</strong>
+                                </td>
+                                <td>
+                                    <i class="fas fa-phone text-success"></i> {{ tenant.tcontact }}
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar-alt text-info"></i> {{ appointment.adate.strftime('%d %b %Y') }}<br>
+                                    <small class="text-muted">{{ appointment.adate.strftime('%I:%M %p') }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge fs-6 px-3 py-2
+                                        {% if appointment.astatus == 'pending' %}bg-warning text-dark
+                                        {% elif appointment.astatus == 'accepted' %}bg-success
+                                        {% else %}bg-danger{% endif %}">
+                                        <i class="fas
+                                            {% if appointment.astatus == 'pending' %}fa-clock
+                                            {% elif appointment.astatus == 'accepted' %}fa-check-circle
+                                            {% else %}fa-times-circle{% endif %} me-1"></i>
+                                        {{ appointment.astatus.title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if appointment.astatus == 'pending' %}
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ url_for('appointments.update_appointment_status', ano=appointment.ano, status='accepted') }}"
+                                           class="btn btn-success btn-sm me-1">
+                                            <i class="fas fa-check"></i> Accept
+                                        </a>
+                                        <a href="{{ url_for('appointments.update_appointment_status', ano=appointment.ano, status='rejected') }}"
+                                           class="btn btn-danger btn-sm">
+                                            <i class="fas fa-times"></i> Reject
+                                        </a>
+                                    </div>
+                                    {% else %}
+                                    <a href="{{ url_for('appointments.download_receipt_landlord', ano=appointment.ano) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-download"></i> Download Receipt
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Appointment Requests</h4>
+                    <p class="text-muted">You don't have any appointment requests at the moment.</p>
+                    <a href="{{ url_for('properties.landlord_dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% if appointments %}
+            <div class="card-footer text-center bg-light">
+                <a href="{{ url_for('properties.landlord_dashboard') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

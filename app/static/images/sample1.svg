@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'>
+<rect width='400' height='300' fill='#e3f2fd'/>
+<rect x='60' y='120' width='280' height='150' rx='15' fill='#90caf9'/>
+<polygon points='60,120 200,30 340,120' fill='#42a5f5'/>
+<rect x='170' y='180' width='60' height='70' fill='#fff'/>
+<text x='200' y='270' font-family='Arial' font-size='22' text-anchor='middle' fill='#0d47a1'>Sample 1</text>
+</svg>

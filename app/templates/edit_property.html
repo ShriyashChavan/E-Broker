@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Property - E BROKERR{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <i class="fas fa-edit fa-2x text-warning mb-2"></i>
+                <h3 class="mb-0">Edit Property</h3>
+                <p class="text-muted mb-0">Update your property details</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="ptype" class="form-label">
+                                    <i class="fas fa-building"></i> Property Type
+                                </label>
+                                <select class="form-select" id="ptype" name="ptype" required>
+                                    <option value="Apartment" {% if property.ptype == 'Apartment' %}selected{% endif %}>🏢 Apartment</option>
+                                    <option value="House" {% if property.ptype == 'House' %}selected{% endif %}>🏠 House</option>
+                                    <option value="Room" {% if property.ptype == 'Room' %}selected{% endif %}>🛏️ Room</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="bhk" class="form-label">
+                                    <i class="fas fa-bed"></i> BHK
+                                </label>
+                                <input type="number" class="form-control" id="bhk" name="bhk" value="{{ property.bhk }}" required min="1" max="5" placeholder="e.g., 2">
+                                <div class="form-text">Number of bedrooms, hall, and kitchen</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="paddress" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> Property Address
+                        </label>
+                        <textarea class="form-control" id="paddress" name="paddress" rows="3" required placeholder="Enter complete address">{{ property.paddress }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="plocation" class="form-label">
+                                    <i class="fas fa-city"></i> Location/City
+                                </label>
+                                <input type="text" class="form-control" id="plocation" name="plocation" value="{{ property.plocation }}" required placeholder="e.g., Mumbai, Maharashtra">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="carpet" class="form-label">
+                                    <i class="fas fa-rupee-sign"></i> Monthly Rent
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" class="form-control" id="carpet" name="carpet" value="{{ property.carpet }}" required min="0" step="0.01" placeholder="15000">
+                                </div>
+                                <div class="form-text">Enter rent amount in rupees</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="no_of_tenant" class="form-label">
+                                    <i class="fas fa-users"></i> Maximum Tenants
+                                </label>
+                                <input type="number" class="form-control" id="no_of_tenant" name="no_of_tenant" value="{{ property.no_of_tenant }}" required min="1" max="10" placeholder="e.g., 4">
+                                <div class="form-text">Maximum number of tenants allowed</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="img1" class="form-label">
+                                    <i class="fas fa-camera"></i> Property Image
+                                </label>
+                                <input type="file" class="form-control" id="img1" name="img1" accept="image/*">
+                                <div class="form-text">Leave empty to keep current image</div>
+                                {% if property.img1 %}
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-image"></i> Current image: {{ property.img1 }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                            <i class="fas fa-save"></i> Update Property
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-light">
+                <a href="{{ url_for('properties.landlord_dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

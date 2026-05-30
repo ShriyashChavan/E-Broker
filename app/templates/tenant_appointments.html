@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments - E BROKERR{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-header bg-info text-white">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-calendar-alt fa-2x me-3"></i>
+                    <div>
+                        <h3 class="mb-0">My Appointments</h3>
+                        <p class="mb-0 opacity-75">Track your property viewing requests</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if appointments %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><i class="fas fa-home"></i> Property</th>
+                                <th><i class="fas fa-map-marker-alt"></i> Location</th>
+                                <th><i class="fas fa-rupee-sign"></i> Rent</th>
+                                <th><i class="fas fa-user-tie"></i> Landlord</th>
+                                <th><i class="fas fa-phone"></i> Contact</th>
+                                <th><i class="fas fa-clock"></i> Date & Time</th>
+                                <th><i class="fas fa-info-circle"></i> Status</th>
+                                <th><i class="fas fa-cogs"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment, property in appointments %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            {% if property.images %}
+                                            <img src="{{ property.images[0].image_url }}" alt="Property Image" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                                            {% else %}
+                                            <img src="{{ url_for('static', filename='images/default_property.svg') }}" alt="Default Property Image" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <strong>{{ property.ptype }} - {{ property.bhk }} BHK</strong><br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-address-card"></i> {{ property.paddress[:50] }}...
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="fas fa-city text-success"></i> {{ property.plocation }}
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-primary">₹{{ property.carpet }}</span>
+                                    <small class="text-muted d-block">per month</small>
+                                </td>
+                                <td>
+                                    <strong>{{ property.landlord.lname }}</strong><br>
+                                    <small class="text-muted">{{ property.landlord.lemail }}</small>
+                                </td>
+                                <td>
+                                    <i class="fas fa-phone text-success"></i> <a href="tel:{{ property.landlord.contact }}">{{ property.landlord.contact }}</a>
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar-alt text-info"></i> {{ appointment.adate.strftime('%d %b %Y') }}<br>
+                                    <small class="text-muted">{{ appointment.adate.strftime('%I:%M %p') }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge fs-6 px-3 py-2
+                                        {% if appointment.astatus == 'pending' %}bg-warning text-dark
+                                        {% elif appointment.astatus == 'accepted' %}bg-success
+                                        {% else %}bg-danger{% endif %}">
+                                        <i class="fas
+                                            {% if appointment.astatus == 'pending' %}fa-clock
+                                            {% elif appointment.astatus == 'accepted' %}fa-check-circle
+                                            {% else %}fa-times-circle{% endif %} me-1"></i>
+                                        {{ appointment.astatus.title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if appointment.astatus == 'accepted' %}
+                                    <a href="{{ url_for('appointments.download_receipt', ano=appointment.ano) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-download"></i> Download Receipt
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted">N/A</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-plus fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Appointments Booked</h4>
+                    <p class="text-muted">You haven't booked any appointments yet.</p>
+                    <a href="{{ url_for('properties.search') }}" class="btn btn-info">
+                        <i class="fas fa-search"></i> Search for Properties
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% if appointments %}
+            <div class="card-footer text-center bg-light">
+                <a href="{{ url_for('properties.search') }}" class="btn btn-outline-info">
+                    <i class="fas fa-search"></i> Find More Properties
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

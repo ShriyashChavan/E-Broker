@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Search Properties - E BROKERR{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2><i class="fas fa-search"></i> Search Properties</h2>
+        <form method="POST" class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="min_rent" class="form-label">Min Rent (₹)</label>
+                        <input type="number" class="form-control" id="min_rent" name="min_rent" placeholder="0">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="max_rent" class="form-label">Max Rent (₹)</label>
+                        <input type="number" class="form-control" id="max_rent" name="max_rent" placeholder="50000">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="property_type" class="form-label">Property Type</label>
+                        <select class="form-select" id="property_type" name="property_type">
+                            <option value="">All Types</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="House">House</option>
+                            <option value="Room">Room</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <label for="bhk" class="form-label">BHK</label>
+                        <select class="form-select" id="bhk" name="bhk">
+                            <option value="">Any</option>
+                            <option value="1">1 BHK</option>
+                            <option value="2">2 BHK</option>
+                            <option value="3">3 BHK</option>
+                            <option value="4">4 BHK</option>
+                            <option value="5">5+ BHK</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for property in properties %}
+    <div class="col-md-4 mb-4">
+        <div class="card property-card h-100">
+            {% if property.images %}
+            <img src="{{ property.images[0].image_url }}" class="card-img-top" alt="Property Image">
+            {% else %}
+            <img src="{{ url_for('static', filename='images/default_property.svg') }}" class="card-img-top" alt="Default Property Image">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ property.ptype }} - {{ property.bhk }} BHK</h5>
+                <p class="card-text">
+                    <i class="fas fa-map-marker-alt"></i> {{ property.plocation }}<br>
+                    <i class="fas fa-rupee-sign"></i> ₹{{ property.carpet }} per month<br>
+                    <i class="fas fa-users"></i> Up to {{ property.no_of_tenant }} tenants
+                </p>
+                <p class="card-text text-truncate">{{ property.paddress }}</p>
+                
+                <!-- Landlord Contact Section -->
+                <hr class="my-2">
+                <div class="landlord-info bg-light p-2 rounded">
+                    <p class="mb-1"><strong><i class="fas fa-user"></i> Landlord:</strong> {{ property.landlord.lname }}</p>
+                    <p class="mb-1 small"><i class="fas fa-phone text-success"></i> <a href="tel:{{ property.landlord.contact }}">{{ property.landlord.contact }}</a></p>
+                    <p class="mb-0 small"><i class="fas fa-envelope"></i> <a href="mailto:{{ property.landlord.lemail }}">{{ property.landlord.lemail }}</a></p>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="d-flex justify-content-between gap-2">
+                    <form method="POST" action="{{ url_for('appointments.book_appointment', pno=property.pno) }}" class="flex-fill">
+                        <button type="submit" class="btn btn-success btn-sm w-100">
+                            <i class="fas fa-calendar-plus"></i> Book Appointment
+                        </button>
+                    </form>
+                    <a href="{{ url_for('feedback.add_feedback', pno=property.pno) }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-star"></i> Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not properties %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+            <h4>No properties found</h4>
+            <p>Try adjusting your search criteria or check back later for new listings.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

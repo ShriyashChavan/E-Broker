@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}Database Overview - E BROKERR{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-database"></i> Live Database Overview</h2>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                <h4 class="card-title">{{ stats.tenants }}</h4>
+                <p class="card-text">Tenants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-building fa-2x text-success mb-2"></i>
+                <h4 class="card-title">{{ stats.landlords }}</h4>
+                <p class="card-text">Landlords</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-cog fa-2x text-warning mb-2"></i>
+                <h4 class="card-title">{{ stats.admins }}</h4>
+                <p class="card-text">Admins</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-home fa-2x text-info mb-2"></i>
+                <h4 class="card-title">{{ stats.properties }}</h4>
+                <p class="card-text">Properties</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-calendar-check fa-2x text-secondary mb-2"></i>
+                <h4 class="card-title">{{ stats.appointments }}</h4>
+                <p class="card-text">Appointments</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-star fa-2x text-danger mb-2"></i>
+                <h4 class="card-title">{{ stats.feedbacks }}</h4>
+                <p class="card-text">Feedbacks</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tenants Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-users"></i> Tenants ({{ stats.tenants }})</h5>
+            </div>
+            <div class="card-body">
+                {% if tenants %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Age</th>
+                                <th>Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tenant in tenants %}
+                            <tr>
+                                <td>{{ tenant.tno }}</td>
+                                <td>{{ tenant.tname }}</td>
+                                <td>{{ tenant.temail }}</td>
+                                <td>{{ tenant.tage or 'N/A' }}</td>
+                                <td>{{ tenant.tcontact }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No tenants found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Landlords Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-building"></i> Landlords ({{ stats.landlords }})</h5>
+            </div>
+            <div class="card-body">
+                {% if landlords %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for landlord in landlords %}
+                            <tr>
+                                <td>{{ landlord.lid }}</td>
+                                <td>{{ landlord.lname }}</td>
+                                <td>{{ landlord.lemail }}</td>
+                                <td>{{ landlord.contact }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No landlords found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Admins Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-cog"></i> Admins ({{ stats.admins }})</h5>
+            </div>
+            <div class="card-body">
+                {% if admins %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for admin in admins %}
+                            <tr>
+                                <td>{{ admin.aid }}</td>
+                                <td>{{ admin.aname }}</td>
+                                <td>{{ admin.aemail }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No admins found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Properties Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-home"></i> Properties ({{ stats.properties }})</h5>
+            </div>
+            <div class="card-body">
+                {% if properties %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Address</th>
+                                <th>Location</th>
+                                <th>BHK</th>
+                                <th>Rent (₹)</th>
+                                <th>Tenants</th>
+                                <th>Landlord ID</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for property in properties %}
+                            <tr>
+                                <td>{{ property.pno }}</td>
+                                <td>{{ property.ptype }}</td>
+                                <td>{{ property.paddress }}</td>
+                                <td>{{ property.plocation }}</td>
+                                <td>{{ property.bhk }}</td>
+                                <td>₹{{ property.carpet }}</td>
+                                <td>{{ property.no_of_tenant }}</td>
+                                <td>{{ property.lid }}</td>
+                                <td>
+                                    {% if property.img1 %}
+                                    <span class="badge bg-success">Yes</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">No</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No properties found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Appointments Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-check"></i> Appointments ({{ stats.appointments }})</h5>
+            </div>
+            <div class="card-body">
+                {% if appointments %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Property</th>
+                                <th>Tenant</th>
+                                <th>Landlord</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment, property, tenant, landlord in appointments %}
+                            <tr>
+                                <td>{{ appointment.ano }}</td>
+                                <td>{{ property.ptype }} ({{ property.plocation }})</td>
+                                <td>{{ tenant.tname }}</td>
+                                <td>{{ landlord.lname }}</td>
+                                <td>{{ appointment.adate.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <span class="badge
+                                        {% if appointment.astatus == 'pending' %}bg-warning
+                                        {% elif appointment.astatus == 'accepted' %}bg-success
+                                        {% else %}bg-danger{% endif %}">
+                                        {{ appointment.astatus.title() }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No appointments found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feedbacks Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-star"></i> Feedbacks ({{ stats.feedbacks }})</h5>
+            </div>
+            <div class="card-body">
+                {% if feedbacks %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Property</th>
+                                <th>Tenant</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for feedback, property, tenant in feedbacks %}
+                            <tr>
+                                <td>{{ feedback.fid }}</td>
+                                <td>{{ property.ptype }} ({{ property.plocation }})</td>
+                                <td>{{ tenant.tname }}</td>
+                                <td>
+                                    {% for i in range(5) %}
+                                    <i class="fas fa-star {% if i < feedback.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                    {% endfor %}
+                                    ({{ feedback.rating }}/5)
+                                </td>
+                                <td>{{ feedback.comment or 'No comment' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No feedbacks found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

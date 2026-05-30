@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Feedbacks - E BROKERR{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-comments fa-2x me-3"></i>
+                        <div>
+                            <h3 class="mb-0">Manage Feedbacks</h3>
+                            <p class="mb-0 opacity-75">Review tenant feedback and ratings</p>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if feedbacks %}
+                <div class="row">
+                    {% for feedback, property, tenant in feedbacks %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100 border-success">
+                            <div class="card-header bg-light">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle text-success fa-2x me-3"></i>
+                                    <div>
+                                        <h6 class="mb-0">{{ tenant.tname }}</h6>
+                                        <small class="text-muted">{{ tenant.temail }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-home text-primary me-2"></i>
+                                        <strong>{{ property.ptype }} - {{ property.bhk }} BHK</strong>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt"></i> {{ property.plocation }}
+                                    </small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <strong class="me-2">Rating:</strong>
+                                        {% for i in range(5) %}
+                                            {% if i < feedback.rating %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-muted"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span class="badge bg-warning text-dark ms-2">{{ feedback.rating }}/5</span>
+                                    </div>
+                                </div>
+
+                                {% if feedback.comment %}
+                                <div class="mb-3">
+                                    <strong>Comment:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        <i class="fas fa-quote-left text-muted me-1"></i>
+                                        {{ feedback.comment }}
+                                        <i class="fas fa-quote-right text-muted ms-1"></i>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div class="text-end">
+                                    <small class="text-muted">
+                                        <i class="fas fa-hashtag"></i> Property ID: {{ property.pno }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-comments fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Feedbacks</h4>
+                    <p class="text-muted">There are no feedbacks in the system yet.</p>
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-success">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
